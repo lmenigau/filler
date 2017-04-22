@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 02:34:22 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/22 19:47:10 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/04/22 20:13:50 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,8 @@ int		check_placement(t_map *map, char *map_buff, char *piece_buff, t_psize piece
 		}
 		curr.y++;
 	}
+	if (!cover)
+		return (0);
 	return (1);
 }
 
@@ -211,9 +213,10 @@ int		read_piece(t_map *map, char *buff, t_psize piece_size, size_t piece_length)
 	bound = normalise_piece(piece_buff, piece_size);
 	enemy_pos = find_enemy(map, buff);
 	answer = place(map, buff, piece_buff, piece_size);
-	printf("%d %d\n", answer.y, answer.x);
+	printf("%d %d\n", answer.x, answer.y);
+	fprintf(stderr, "%d %d\n", answer.x, answer.y);
 	if (map->enemy_char == 'O' || map->enemy_char== 'X')
-		map->enemy_char -= 'A' - 'a';
+		map->enemy_char -= 'a' - 'A';
 	return (0);
 }
 
@@ -225,7 +228,7 @@ int		play(t_map *map, size_t map_length)
 	read_input((char *)&map_buff, map_length);
 	write(2, &map_buff, map_length);
 	piece_size = parse_header(sizeof ("Piece"));
-	read_piece(map, (char *)&map_buff, piece_size, (piece_size.x + 1) * piece_size.y);
+	read_piece(map, (char *)&map_buff + map->size.header_length, piece_size, (piece_size.x + 1) * piece_size.y);
 	return (0);
 }
 
