@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 02:35:32 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/19 22:26:29 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/04/22 02:52:08 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,10 @@ typedef struct	s_map
 	t_psize	size;
 	size_t	buff_length;
 }				t_map;
+
+typedef struct s_pbound
+{
+	t_vec	start;
+	t_vec	size;
+}				t_pbound;
 #endif

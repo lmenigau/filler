@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 02:34:22 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/19 23:16:01 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/04/22 05:33:03 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,43 @@ t_psize		parse_header(size_t	offset)
 	return (header_size);
 }
 
-int		read_piece(t_map *map, char *buff, size_t piece_length)
+int		normalise_piece(t_map *map, char *buff , t_psize piece_size)
+{
+	char (*piece_buff)[piece_size.x + 1];
+	t_pbound	bound;
+	int		x;
+	int		y;
+
+	bound = (t_pbound){{-1,-1},{-1, -1}};
+	piece_buff = (char (*)[])buff;
+	y = 0;
+	while (y < piece_size.y)
+	{
+		x = 0;
+		while (x < piece_size.x)
+		{
+			if (piece_buff[y][x] == '*' && bound.start.y == -1)
+				bound.start = (t_vec){x, y};
+			if (piece_buff[y][x] == '*' && x < bound.start.x)
+				bound.start.x = x;
+			if (piece_buff[y][x] == '*')
+				bound.size = (t_vec){x - bound.start.x + 1, y - bound.start.y + 1};
+			x++;
+		}
+		y++;
+	}
+	return (0);
+}
+
+int		read_piece(t_map *map, char *buff, t_psize piece_size, size_t piece_length)
 {
 	char		piece_buff[piece_length];
 
 	fprintf(stderr, "%zu\n", piece_length);
+	fprintf(stderr, "%d, %d\n", piece_size.x, piece_size.y);
 	read_input((char *)&piece_buff, piece_length);
 	write(2, &piece_buff, piece_length);
+	normalise_piece(map, piece_buff, piece_size);
 	return (0);
 }
 
@@ -103,7 +133,7 @@ int		play(t_map *map, size_t map_length)
 	read_input((char *)&map_buff, map_length);
 	write(2, &map_buff, map_length);
 	piece_size = parse_header(sizeof ("Piece"));
-	read_piece(map, (char *)&map_buff, (piece_size.x + 1) * piece_size.y);
+	read_piece(map, (char *)&map_buff, piece_size, (piece_size.x + 1) * piece_size.y);
 	return (0);
 }
 
