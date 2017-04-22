@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 02:35:32 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/22 02:52:08 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/04/22 06:19:32 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct	s_map
 	char	buff[BUFF_SIZE];
 
 	char	player_char;
+	char	enemy_char;
 	size_t	buff_size;
 	t_psize	size;
 	size_t	buff_length;

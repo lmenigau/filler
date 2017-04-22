@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 02:34:22 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/22 05:33:03 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/04/22 06:51:59 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,22 @@ int		read_input(char *buff, size_t max_read)
 	return (0);
 }
 
-char	read_player()
+char	read_player(t_map	*map)
 {
 	char	buff[34];
 
 	read(0, &buff, 34);
 	if (buff[10] == '1')
+	{
+		map->enemy_char='X';
 			return ('O');
-	return ('X');
+	}
+	else
+	{
+		map->enemy_char='O';
+		return ('X');
+	}
+
 }
 
 int		parse_number(const char *str, size_t *index)
@@ -85,7 +93,7 @@ t_psize		parse_header(size_t	offset)
 	return (header_size);
 }
 
-int		normalise_piece(t_map *map, char *buff , t_psize piece_size)
+t_pbound	normalise_piece(char *buff , t_psize piece_size)
 {
 	char (*piece_buff)[piece_size.x + 1];
 	t_pbound	bound;
@@ -110,18 +118,93 @@ int		normalise_piece(t_map *map, char *buff , t_psize piece_size)
 		}
 		y++;
 	}
-	return (0);
+	return (bound);
+}
+
+int		check_placement(t_map *map, char *map_buff, char *piece_buff, t_psize piece_size, t_vec pos)
+{
+	char (*buff)[map->size.x + 1];
+	int		x;
+	int		y;
+
+
+	buff = (char (*)[])map_buff;
+	y = 0;
+	while (y < map->size.y)
+	{
+		x = 0;
+		while (x < map->size.x)
+		{
+			if(buff[y][x] == map->enemy_char)
+				return ((t_vec){x, y});
+			x++;
+		}
+		y++;
+	}
+	return ((t_vec){0, 0});
+
+	return (1);
+}
+
+t_vec		place(t_map *map, char *map_buff, char *piece_buff, t_psize piece_size)
+{
+	char (*buff)[map->size.x + 1];
+	t_vec	pos;
+	t_vec	min;
+
+	buff = (char (*)[])map_buff;
+	pos.y = 0;
+	while (pos.y < map->size.y)
+	{
+		pos.x = 0;
+		while (pos.x < map->size.x)
+		{
+			if(check_placement(map, map_buff, piece_buff, piece_size,pos))
+				min = pos;
+			pos.x++;
+		}
+		pos.y++;
+	}
+	return (min);
+}
+
+t_vec	find_enemy(t_map *map, char *map_buff)
+{
+	char (*buff)[map->size.x + 1];
+	int		x;
+	int		y;
+
+
+	buff = (char (*)[])map_buff;
+	y = 0;
+	while (y < map->size.y)
+	{
+		x = 0;
+		while (x < map->size.x)
+		{
+			if(buff[y][x] == map->enemy_char)
+				return ((t_vec){x, y});
+			x++;
+		}
+		y++;
+	}
+	return ((t_vec){0, 0});
 }
 
 int		read_piece(t_map *map, char *buff, t_psize piece_size, size_t piece_length)
 {
 	char		piece_buff[piece_length];
+	t_pbound	bound;
+	t_vec		enemy_pos;
 
 	fprintf(stderr, "%zu\n", piece_length);
 	fprintf(stderr, "%d, %d\n", piece_size.x, piece_size.y);
 	read_input((char *)&piece_buff, piece_length);
 	write(2, &piece_buff, piece_length);
-	normalise_piece(map, piece_buff, piece_size);
+	bound = normalise_piece(piece_buff, piece_size);
+	enemy_pos = find_enemy(map, buff);
+	if (map->enemy_char == 'O' || map->enemy_char== 'X')
+		map->enemy_char -= 'A' - 'a';
 	return (0);
 }
 
@@ -145,7 +228,7 @@ int		main(void)
 	size_t		i;
 
 	i = 0;
-	map.player_char = read_player();
+	map.player_char = read_player(&map);
 	map_size = parse_header(sizeof ("Plateau"));
 	map.size = map_size;
 	map_length = map_size.header_length + (map_size.y + 1) * (map_size.x + 5);
