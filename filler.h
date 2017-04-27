@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 02:35:32 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/22 06:19:32 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/04/27 05:52:15 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct	s_map
 	size_t	buff_size;
 	t_psize	size;
 	size_t	buff_length;
+	t_vec	enemy_pos;
 }				t_map;
 
 typedef struct s_pbound
