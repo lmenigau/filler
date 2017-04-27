@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 02:34:22 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/27 10:59:11 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/04/27 11:21:04 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,17 @@ int		read_input(char *buff, size_t max_read)
 
 char	read_player(t_map	*map)
 {
-	char	buff[34];
+	char	buff[1024];
+	size_t		index;
+	t_psize		header_size;
 
-	read(0, &buff, 34);
+	index = 0;
+	while (index < 1024 && read(0, &buff[index], 1))
+	{
+		if (buff[index] == '\n')
+			break ;
+		index++;
+	}
 	if (buff[10] == '1')
 	{
 		map->enemy_char='X';
@@ -228,7 +236,7 @@ t_vec		place(t_map *map, char *map_buff, char *piece_buff, t_pbound bound, t_psi
 		}
 		pos.y++;
 	}
-	fprintf(stderr, "dist:%d, %d,%d\n", dist,enemy_pos.x, enemy_pos.y);
+//	fprintf(stderr, "dist:%d, %d,%d\n", dist,enemy_pos.x, enemy_pos.y);
 	return (min);
 }
 
