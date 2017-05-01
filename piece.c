@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/29 01:24:18 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/29 05:50:17 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/05/02 01:12:22 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ int		iter_piece(t_map *map, t_piece *piece, t_vec pos)
 	cover = 0;
 	curr.y = 0;
 	info.size = pos;
-	while (curr.y < piece->bound.size.y && curr.y + pos.y < map->size.y)
+	while (curr.y < piece->bound.size.y && curr.y + pos.y <= map->size.y)
 	{
 		curr.x = 0;
-		while (curr.x < piece->bound.size.x && curr.x + pos.x < map->size.x)
+		while (curr.x < piece->bound.size.x && curr.x + pos.x <= map->size.x)
 		{
 			info.start = curr;
 			if (check_placement(map, piece, info, &cover) == 0)
@@ -84,7 +84,7 @@ int		iter_piece(t_map *map, t_piece *piece, t_vec pos)
 		curr.y++;
 	}
 	if (cover != 1
-			|| curr.x + pos.x >= map->size.x || curr.y + pos.y >= map->size.y)
+			|| curr.x + pos.x > map->size.x || curr.y + pos.y > map->size.y)
 		return (0);
 	return (1);
 }
