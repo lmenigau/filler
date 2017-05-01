@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/29 01:24:18 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/29 01:34:42 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/04/29 05:50:17 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,8 @@ int		check_placement(t_map *map, t_piece *piece, t_bound info, int *cover)
 	mchar = mbuff[info.size.y + info.start.y + 1]
 		[info.size.x + info.start.x + 4];
 	pchar = pbuff[info.start.y + start.y][info.start.x + start.x];
-	if (pchar == '*' && (mchar == map->player_char ||
-				mchar == map->player_char + 'a' - 'A') && !cover)
-		*cover = 1;
+	if (pchar == '*' && mchar == map->player_char && (*cover) == 0)
+		(*cover)++;
 	else if (pchar == '*' && mchar != '.')
 		return (0);
 	return (1);
@@ -72,10 +71,10 @@ int		iter_piece(t_map *map, t_piece *piece, t_vec pos)
 	cover = 0;
 	curr.y = 0;
 	info.size = pos;
-	while (curr.y < piece->bound.size.y && curr.y + pos.y <= map->size.y)
+	while (curr.y < piece->bound.size.y && curr.y + pos.y < map->size.y)
 	{
 		curr.x = 0;
-		while (curr.x < piece->bound.size.x && curr.x + pos.x <= map->size.x)
+		while (curr.x < piece->bound.size.x && curr.x + pos.x < map->size.x)
 		{
 			info.start = curr;
 			if (check_placement(map, piece, info, &cover) == 0)
@@ -85,7 +84,7 @@ int		iter_piece(t_map *map, t_piece *piece, t_vec pos)
 		curr.y++;
 	}
 	if (cover != 1
-			|| curr.x + pos.x > map->size.x || curr.y + pos.y > map->size.y)
+			|| curr.x + pos.x >= map->size.x || curr.y + pos.y >= map->size.y)
 		return (0);
 	return (1);
 }

@@ -6,14 +6,14 @@
 #*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        *#
 #*                                                +#+#+#+#+#+   +#+           *#
 #*   Created: 2016/11/18 02:18:30 by lmenigau          #+#    #+#             *#
-#*   Updated: 2017/04/29 01:32:33 by lmenigau         ###   ########.fr       *#
+#*   Updated: 2017/04/29 05:51:53 by lmenigau         ###   ########.fr       *#
 #*                                                                            *#
 #* ************************************************************************** *#
 
 NAME	= lmenigau.filler
 SRC		= filler.c algo.c piece.c reading.c
 OBJ		= $(SRC:.c=.o)
-CFLAGS	= -Wall -Wextra -g -Ilibft/ -Ofast #-fsanitize=address
+CFLAGS	= -Wall -Wextra -g -Ilibft/ -Ofast
 LFLAGS	= -lft
 LDFLAGS	= -Llibft/
 LIBDIR	= libft/

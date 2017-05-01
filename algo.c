@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/29 01:27:11 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/29 01:36:24 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/05/01 23:32:40 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		ft_abs(int nb)
 	return (nb);
 }
 
-int		dist_magic(t_piece *piece, t_vec enemy_pos, t_vec pos, int dist)
+int		dist_magic(t_piece *piece, t_vec enemy_pos, t_vec pos, int *dist)
 {
 	int		tmp;
 
@@ -32,9 +32,12 @@ int		dist_magic(t_piece *piece, t_vec enemy_pos, t_vec pos, int dist)
 		tmp -= (piece->size.y);
 	else if (enemy_pos.y - pos.y < piece->size.y && enemy_pos.y >= pos.y)
 		tmp -= (enemy_pos.y - pos.y);
-	if (tmp < dist)
-		return (tmp);
-	return (dist);
+	if (tmp < *dist)
+	{
+		*dist = tmp;
+		return (1);
+	}
+	return (0);
 }
 
 t_vec	place(t_map *map, t_piece *piece)
@@ -47,21 +50,20 @@ t_vec	place(t_map *map, t_piece *piece)
 
 	min = (t_vec){0, 0};
 	buff = (char (*)[])map->buff;
-	pos.y = 0;
+	pos.y = -1;
 	dist = 30000;
-	while (pos.y <= map->size.y)
+	while (++pos.y <= map->size.y)
 	{
-		pos.x = 0;
-		while (pos.x <= map->size.x)
+		pos.x = -1;
+		while (++pos.x <= map->size.x)
 		{
 			if (iter_piece(map, piece, pos))
 			{
 				enemy_pos = find_enemy(map, map->buff, pos);
-				dist = dist_magic(piece, enemy_pos, pos, dist);
+				if (dist_magic(piece, enemy_pos, pos, &dist))
+					min = pos;
 			}
-			pos.x++;
 		}
-		pos.y++;
 	}
 	return (min);
 }

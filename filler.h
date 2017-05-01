@@ -6,7 +6,7 @@
 /*   By: lmenigau <lmenigau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 02:35:32 by lmenigau          #+#    #+#             */
-/*   Updated: 2017/04/29 01:37:43 by lmenigau         ###   ########.fr       */
+/*   Updated: 2017/05/01 23:33:49 by lmenigau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,9 @@
 # define FILLER_H
 
 # include <sys/types.h>
-# include <sys/uio.h>
 # include <unistd.h>
-# include <sys/types.h>
 # include <sys/uio.h>
-# include <unistd.h>
 # include "libft.h"
-
-# define BUFF_SIZE	(4096 * 16)
 
 typedef struct	s_vec
 {
